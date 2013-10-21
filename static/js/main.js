@@ -69,7 +69,7 @@
       secs = duration - (mins * 60);
       d.setTime(Date.parse(entry.published.$t));
       videoentry = new VideoEntry({
-        thumbnail: entry.media$group.media$thumbnail[0].url,
+        thumbnail: entry.media$group.media$thumbnail[0].url.replace('0.jpg', 'default.jpg'),
         link: entry.link[0].href,
         title: entry.title.$t,
         author: entry.author[0].name.$t,
