@@ -14,6 +14,7 @@
 <div class="container">
   <div class="navbar navbar-default">
     <a class="navbar-brand" href="index.html">Popular Videos</a>
+
     <form id="searchform" class="navbar-form navbar-left" role="search">
       <div class="form-group">
         <input id="searchval" name="searchval" type="text" class="form-control" placeholder="Search">
@@ -22,13 +23,15 @@
     </form>
   </div>
   <div id="popular-items"></div>
+  <div id="stats"></div>
 </div>
 <script type="text/html" id="item-template">
   <div class="vitem col-md-3">
-    <a href="<%= link %>" target="_blank"><img src="http://img.youtube.com/vi/<%= id %>/default.jpg" alt=""/></a>
-
-    <p><a href="<%= link %>" target="_blank"><%= title %></a></p>
-    </div>
+    <a href="<%= link %>" target="_blank"><img src="<%= thumbnail %>" alt=""/></a>
+    <p><a href="<%= link %>" target="_blank"><%= title %> (<%= duration %>)</a></p>
+    <p class="byline">by <%= author %> on <%= uploaded %></p>
+    <p class="byline">views: <%= views %></p>
+  </div>
 </script>
 <script src="static/js/jquery.min.js"></script>
 <script src="static/js/underscore-min.js"></script>

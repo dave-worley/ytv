@@ -2,9 +2,13 @@
   var VideoEntry, VideoList, VideoEntryView, VideoListView;
   VideoEntry = Backbone.Model.extend({
     defaults: {
-      id: '',
+      thumbnail: '',
       link: '',
-      title: ''
+      title: '',
+      author: '',
+      duration: '',
+      uploaded: '',
+      views: 0
     }
   });
   VideoList = Backbone.Collection.extend({
@@ -58,20 +62,24 @@
     entries = data['feed']['entry'];
     ListView = new VideoListView();
     _.each(entries, function (entry, index, list) {
-      var videoentry, id;
-      id = entry.id.$t;
-      if (id.indexOf('tag:') !== -1) {
-        id = _.last(id.split(':'));
-      } else {
-        id = _.last(id.split('/'));
-      }
+      var videoentry, d, duration, mins, secs;
+      d = new Date();
+      duration = parseInt(entry.media$group.media$content[0].duration);
+      mins = Math.floor(duration/60);
+      secs = duration - (mins * 60);
+      d.setTime(Date.parse(entry.published.$t));
       videoentry = new VideoEntry({
-        id: id,
+        thumbnail: entry.media$group.media$thumbnail[0].url,
         link: entry.link[0].href,
-        title: entry.title.$t
+        title: entry.title.$t,
+        author: entry.author[0].name.$t,
+        uploaded: d.toLocaleString(),
+        duration: mins + 'm ' + secs + 's',
+        views: parseInt(entry.yt$statistics.viewCount)
       });
       ListView.collection.add(videoentry);
     });
+    $('#stats').html(entries.length + ' records found.');
   };
   $.getJSON('http://gdata.youtube.com/feeds/api/standardfeeds/most_popular?v=2&alt=json&callback=?', function (data) {
     render(data);
